@@ -37,6 +37,14 @@ Exported 2026-10-04 from the `support` repo, `apps/kb/` → `src/`.
 
 ## S01E03 review
 
+- [Signed review source (.svx)](deliverables/4471-review.svx)
+- [Rendered review for the desk (.html)](deliverables/4471-review.html)
+- [KB route source](src/routes/kb/incidents/4471-review/+page.svx)
+- [Replacement decision source](deliverables/0002-dedupe-by-cause.svx)
+- [Rendered replacement decision](deliverables/0002-dedupe-by-cause.html)
+
+The deliverables folder keeps each signed source beside its rendered capture with a matching name.
+
 The signed review is at `src/routes/kb/incidents/4471-review/+page.svx`.
 Its standalone rendered capture is `deliverables/4471-review.html`.
 Decision 0002 supersedes decision 0001; the accepted old decision remains unchanged.

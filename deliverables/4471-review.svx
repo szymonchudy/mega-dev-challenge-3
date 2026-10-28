@@ -1,0 +1,70 @@
+---
+layout: runbook
+title: '#4471 review · two date problems, two tickets'
+owner: support desk
+status: closed
+reviewed: 2026-10-28
+signature: 'Codex for Szymon Chudy · S01E03 · 2026-10-28'
+---
+
+<script>
+  import ReviewFindings from '#lib/kb/ReviewFindings.svelte';
+  import CauseTable from '#lib/kb/CauseTable.svelte';
+  import QueueTimeline from '#lib/kb/QueueTimeline.svelte';
+  import DedupeExplorer from '#lib/kb/DedupeExplorer.svelte';
+  import RenderStamp from '#lib/kb/RenderStamp.svelte';
+  import Callout from '#lib/kb/Callout.svelte';
+</script>
+
+The [original #4471 page](/kb/incidents/4471) says one issue has one fix queued. Its rendered cause table contradicts that conclusion: the desk merged two problems. The parser ticket does not cover the booking-form hint fix.
+
+<Callout kind="warn">Keep the two causes in separate engineering tickets. A matching subject and an intake tag are clues, not proof of a duplicate.</Callout>
+
+## Counts and tickets
+
+<ReviewFindings />
+
+## What the live view shows
+
+<CauseTable ticket={4471} />
+
+The final column preserves the original desk ticket mapping in the export. The new engineering tickets are linked above.
+
+Classify using each tenant's locale and booking-form version from the tenant directory, plus the report channel. `Intl.DateTimeFormat(...).formatToParts()` determines day-first order. Browser locale and `meta.intakeTag` are intake guesses and cannot replace the tenant lookup. Deduplicate report IDs before counting overlapping export pages.
+
+**Parser:** the shared parser reads dates month first for day-first tenants. For example, Harbour Dental's R-41200 reports 7 April becoming 4 July. Fix parsing to honor the tenant's date convention, including ambiguous dates; check app, email and booking-v2 paths.
+
+**Hint:** booking-v3 prints `MM/DD/YYYY` for day-first tenants. People follow that hint, while the form reads their input in the tenant's day-first order. For example, Alder Physio's R-41241 reports 6 August becoming 8 June. Align the displayed hint, validation and parsing with the tenant locale. Test Alder Physio, Copper Studio and Pale Harbour forms separately from the shared parser.
+
+## Read the two clocks separately
+
+<QueueTimeline ticket={4471} />
+
+The received series is report arrival. The merged series is desk processing. A late bulk merge cannot date the start of an incident. Use receipt dates for onset and persistence, and merge dates to understand queue handling. The export is a snapshot dated 4 October; these views recompute when reports or tenant files change.
+
+## Replace subject-only triage
+
+The [old triage page](/kb/triage/dedupe) and [accepted decision 0001](/kb/decisions/0001-dedupe-by-subject) recommend merging on subject. Both were reviewed in June 2024, beyond the kb's 180-day review limit. Their rendered warning and these cases show why that advice needs replacement.
+
+<DedupeExplorer />
+
+Different subjects can share a cause (Kettle Books app and email). The same subject can hide different causes (Alder Physio form versus app, or Copper Studio versus Morrow Tax forms). Unknown tenants have no established cause and stay apart until investigated.
+
+[Decision 0002](/kb/decisions/0002-dedupe-by-cause) replaces decision 0001 without rewriting its accepted history. It applies across the desk's products: identify product, tenant configuration, path and reproducible failure before merging. The date-specific classifier is evidence for this incident, not a universal classifier for every product.
+
+## Engineering outcome · 5 October 2026
+
+The [course desk update](https://hq.mega.dev/challenges/what-it-shows#engineering-update) now records #4471 as closed on 5 October:
+
+- **Parser — fixed:** `fix(dates): parse dd/mm for eu locales`. Close the parser engineering ticket as completed.
+- **Hint — won’t fix:** booking-v3 was retired. Close the hint engineering ticket as not planned. Retirement removes the affected form; it is not evidence that the hint was corrected.
+
+These are different outcomes. The original page’s “one fix queued” claim is historical. The new evidence does not supply reproduction results for the five one-day-move reports, so their explanation remains unverified; do not claim the parser change proves their cause.
+
+## Desk actions and review
+
+Preserve report IDs and receipt dates when routing any new recurrence. Read the body and verify the current tenant configuration before matching a closed ticket. Recompute counts and inspect rendered views when the export changes. Reopen or file a new investigation if the retired form is still reachable, the parser failure returns, or an exceptional report reproduces under a different cause.
+
+Signed by Codex for Szymon Chudy, 28 October 2026. This page records the supplied export and its executed views; engineering outcomes above are attributed to the course desk update, without claiming independent deployment validation.
+
+<RenderStamp {signature} />

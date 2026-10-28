@@ -10,6 +10,7 @@ try {
  })) {
   const {snapshot}=await server.ssrLoadModule('/src/render.js');
   const result=snapshot(path);
+  if (slug === '4471-review' || slug === '0002-dedupe-by-cause') fs.copyFileSync(`src/routes/kb/${path}/+page.svx`, `deliverables/${slug}.svx`);
   const styles=fs.readdirSync('dist/assets').filter(f=>f.endsWith('.css')).map(f=>fs.readFileSync('dist/assets/'+f,'utf8')).join('\n');
   fs.writeFileSync(`deliverables/${slug}.html`,`<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">${result.head}<style>${styles}</style></head><body>${result.body}</body></html>`);
  }

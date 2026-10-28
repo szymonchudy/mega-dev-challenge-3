@@ -1,0 +1,35 @@
+---
+layout: runbook
+title: '0002 · Duplicate reports share a demonstrated cause'
+owner: support desk
+status: accepted
+reviewed: 2026-10-28
+signature: 'Codex for Szymon Chudy · S01E03 · 2026-10-28'
+---
+
+<script>
+  import DedupeExplorer from '#lib/kb/DedupeExplorer.svelte';
+  import RenderStamp from '#lib/kb/RenderStamp.svelte';
+</script>
+
+**Date:** 28 October 2026 · **Decider:** Szymon Chudy's challenge harness
+
+**Supersedes:** [0001 · Duplicates share a subject line](/kb/decisions/0001-dedupe-by-subject). Keep that accepted record unchanged as history.
+
+## Context
+
+The [#4471 review](/kb/incidents/4471-review) separates two causes hidden under the same date complaints. Subject-only merging loses the engineering distinction; different subjects can also report the same cause. The old decision's accepted status did not keep it current.
+
+## Decision
+
+Across all products served by this desk, merge reports only when evidence establishes the same underlying problem. Confirm product, tenant configuration, input path, expected versus actual behavior, and a reproduction or diagnostic evidence. Use subject matching to find candidates, then read the reports. Keep unknown or conflicting cases separate until investigated.
+
+For #4471, run the tenant-aware classifier after deduplicating report IDs. A day-first tenant's booking-v3 form goes to hint; other supported paths go to parser. Do not use browser locale or intakeTag as the cause. Flag bodies that contradict that classification for reproduction.
+
+<DedupeExplorer />
+
+## Consequences
+
+Triage requires more reading, but engineering gets one actionable ticket per cause. Preserve report counts and evidence when splitting a merged ticket. Revisit this decision when product behavior or tenant configuration changes, and before its review becomes stale. A queued fix for one cause cannot resolve a different cause.
+
+<RenderStamp {signature} />

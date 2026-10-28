@@ -1,0 +1,61 @@
+---
+layout: runbook
+title: '#4471 review · two date problems, two tickets'
+owner: support desk
+status: reviewed
+reviewed: 2026-10-28
+signature: 'Codex for Szymon Chudy · S01E03 · 2026-10-28'
+---
+
+<script>
+  import ReviewFindings from '#lib/kb/ReviewFindings.svelte';
+  import CauseTable from '#lib/kb/CauseTable.svelte';
+  import QueueTimeline from '#lib/kb/QueueTimeline.svelte';
+  import DedupeExplorer from '#lib/kb/DedupeExplorer.svelte';
+  import RenderStamp from '#lib/kb/RenderStamp.svelte';
+  import Callout from '#lib/kb/Callout.svelte';
+</script>
+
+The [original #4471 page](/kb/incidents/4471) says one issue has one fix queued. Its rendered cause table contradicts that conclusion: the desk merged two problems. The parser ticket does not cover the booking-form hint fix.
+
+<Callout kind="warn">Keep the two causes in separate engineering tickets. A matching subject and an intake tag are clues, not proof of a duplicate.</Callout>
+
+## Counts and tickets
+
+<ReviewFindings />
+
+## What the live view shows
+
+<CauseTable ticket={4471} />
+
+The final column preserves the original desk ticket mapping in the export. The new engineering tickets are linked above.
+
+Classify using each tenant's locale and booking-form version from the tenant directory, plus the report channel. `Intl.DateTimeFormat(...).formatToParts()` determines day-first order. Browser locale and `meta.intakeTag` are intake guesses and cannot replace the tenant lookup. Deduplicate report IDs before counting overlapping export pages.
+
+**Parser:** the shared parser reads dates month first for day-first tenants. For example, Harbour Dental's R-41200 reports 7 April becoming 4 July. Fix parsing to honor the tenant's date convention, including ambiguous dates; check app, email and booking-v2 paths.
+
+**Hint:** booking-v3 prints `MM/DD/YYYY` for day-first tenants. People follow that hint, while the form reads their input in the tenant's day-first order. For example, Alder Physio's R-41241 reports 6 August becoming 8 June. Align the displayed hint, validation and parsing with the tenant locale. Test Alder Physio, Copper Studio and Pale Harbour forms separately from the shared parser.
+
+## Read the two clocks separately
+
+<QueueTimeline ticket={4471} />
+
+The received series is report arrival. The merged series is desk processing. A late bulk merge cannot date the start of an incident. Use receipt dates for onset and persistence, and merge dates to understand queue handling. The export is a snapshot dated 4 October; these views recompute when reports or tenant files change.
+
+## Replace subject-only triage
+
+The [old triage page](/kb/triage/dedupe) and [accepted decision 0001](/kb/decisions/0001-dedupe-by-subject) recommend merging on subject. Both were reviewed in June 2024, beyond the kb's 180-day review limit. Their rendered warning and these cases show why that advice needs replacement.
+
+<DedupeExplorer />
+
+Different subjects can share a cause (Kettle Books app and email). The same subject can hide different causes (Alder Physio form versus app, or Copper Studio versus Morrow Tax forms). Unknown tenants have no established cause and stay apart until investigated.
+
+[Decision 0002](/kb/decisions/0002-dedupe-by-cause) replaces decision 0001 without rewriting its accepted history. It applies across the desk's products: identify product, tenant configuration, path and reproducible failure before merging. The date-specific classifier is evidence for this incident, not a universal classifier for every product.
+
+## Desk actions and review
+
+Route new #4471 reports to the matching engineering cause, preserving report IDs and receipt dates. Read the body, verify tenant configuration, and retain uncertain reports for investigation. Recompute the counts and inspect the rendered tables when the export changes. Verify both fixes with representative tenant and channel combinations before marking the combined incident resolved.
+
+Signed by Codex for Szymon Chudy, 28 October 2026. This page records the supplied export and its executed views; it does not claim a deployed fix.
+
+<RenderStamp {signature} />

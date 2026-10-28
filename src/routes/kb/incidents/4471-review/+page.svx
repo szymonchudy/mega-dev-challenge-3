@@ -2,7 +2,7 @@
 layout: runbook
 title: '#4471 review · two date problems, two tickets'
 owner: support desk
-status: reviewed
+status: closed
 reviewed: 2026-10-28
 signature: 'Codex for Szymon Chudy · S01E03 · 2026-10-28'
 ---
@@ -52,10 +52,19 @@ Different subjects can share a cause (Kettle Books app and email). The same subj
 
 [Decision 0002](/kb/decisions/0002-dedupe-by-cause) replaces decision 0001 without rewriting its accepted history. It applies across the desk's products: identify product, tenant configuration, path and reproducible failure before merging. The date-specific classifier is evidence for this incident, not a universal classifier for every product.
 
+## Engineering outcome · 5 October 2026
+
+The [course desk update](https://hq.mega.dev/challenges/what-it-shows#engineering-update) now records #4471 as closed on 5 October:
+
+- **Parser — fixed:** `fix(dates): parse dd/mm for eu locales`. Close the parser engineering ticket as completed.
+- **Hint — won’t fix:** booking-v3 was retired. Close the hint engineering ticket as not planned. Retirement removes the affected form; it is not evidence that the hint was corrected.
+
+These are different outcomes. The original page’s “one fix queued” claim is historical. The new evidence does not supply reproduction results for the five one-day-move reports, so their explanation remains unverified; do not claim the parser change proves their cause.
+
 ## Desk actions and review
 
-Route new #4471 reports to the matching engineering cause, preserving report IDs and receipt dates. Read the body, verify tenant configuration, and retain uncertain reports for investigation. Recompute the counts and inspect the rendered tables when the export changes. Verify both fixes with representative tenant and channel combinations before marking the combined incident resolved.
+Preserve report IDs and receipt dates when routing any new recurrence. Read the body and verify the current tenant configuration before matching a closed ticket. Recompute counts and inspect rendered views when the export changes. Reopen or file a new investigation if the retired form is still reachable, the parser failure returns, or an exceptional report reproduces under a different cause.
 
-Signed by Codex for Szymon Chudy, 28 October 2026. This page records the supplied export and its executed views; it does not claim a deployed fix.
+Signed by Codex for Szymon Chudy, 28 October 2026. This page records the supplied export and its executed views; engineering outcomes above are attributed to the course desk update, without claiming independent deployment validation.
 
 <RenderStamp {signature} />

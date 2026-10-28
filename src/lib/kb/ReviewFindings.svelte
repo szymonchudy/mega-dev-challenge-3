@@ -14,8 +14,8 @@
 </script>
 <p>The export has {reports.length} rows and {merged.length} unique reports in #4471; {reports.length - merged.length} rows repeat report IDs. Reports were received from {earliest} through {latest}. Intake tags disagree with tenant-based classification for {misclassified} reports.</p>
 <table>
-  <thead><tr><th>Problem</th><th>Reports covered</th><th>Engineering ticket</th></tr></thead>
-  <tbody>{#each groups as group (group.cause)}<tr><td>{group.cause === 'parser' ? 'Shared parser reads month first' : 'booking-v3 prints a month-first hint'}</td><td>{group.reports.length}</td><td><a href={`${repository}/issues/${group.cause === 'parser' ? 1 : 2}`}>{group.cause}</a></td></tr>{/each}</tbody>
+  <thead><tr><th>Problem</th><th>Reports covered</th><th>Engineering ticket</th><th>Desk outcome · 5 October</th></tr></thead>
+  <tbody>{#each groups as group (group.cause)}<tr><td>{group.cause === 'parser' ? 'Shared parser reads month first' : 'booking-v3 prints a month-first hint'}</td><td>{group.reports.length}</td><td><a href={`${repository}/issues/${group.cause === 'parser' ? 1 : 2}`}>{group.cause}</a></td><td>{group.cause === 'parser' ? 'Fixed' : 'Won’t fix · booking-v3 retired'}</td></tr>{/each}</tbody>
 </table>
 <p>On 2026-07-02, {backfill} reports were merged. That spike records desk activity; receipt dates show when the problem was reported. It is not evidence that the bug began in July.</p>
 <h2>Reports that do not describe a month/day swap</h2>
